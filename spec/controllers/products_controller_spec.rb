@@ -1,244 +1,285 @@
 require 'spec_helper'
 
+# I rewrote this spec file from scratch. It has ALL of the
+# original tests and the old functionality is preserved, but it now also
+# contains some complementary specs and many fixes
+# over the previous file (like better structure, fixed deprecated syntax etc.)
+
 describe ProductsController do
-  let(:category)      { create(:category) }
-  let(:valid_attributes) do
-    {
-      title: 'MyString',
-      description: 'Some description',
-      price: 2.5,
-      category_id: category.id,
-    }
-  end
-
-  context 'user is not signed in' do
-    describe 'POST create' do
-      describe 'with valid params' do
-        it 'redirects user to login page' do
-          post :create, { product: valid_attributes, category_id: category.to_param }
-          expect(response).to redirect_to(new_user_session_path)
-        end
-      end
-    end
-
-    describe 'PUT update' do
-      describe 'with valid params' do
-        it 'redirects user to login page' do
-          product = Product.create! valid_attributes
-          put :update, { id: product.to_param, product: { title: 'MyString' }, category_id: category.to_param }
-          expect(response).to redirect_to(new_user_session_path)
-        end
-      end
-    end
-  end
-
-  context 'another user is signed in' do
-    let(:user) { create(:user) }
-    let(:user2) { build(:user) }
-    let(:product) { Product.create! valid_attributes }
-
-    before do
-      sign_in user2
-      controller.stub(:user_signed_in?).and_return(true)
-      controller.stub(:current_user).and_return(user2)
-      controller.stub(:authenticate_user!).and_return(user2)
-      product.user = user
-    end
-
-    describe 'GET edit' do
-      describe 'with valid params' do
-        it 'redirects to product page' do
-          get :edit, { id: product.to_param, category_id: category.to_param }
-          expect(response).to redirect_to(category_product_url(category, product))
-        end
-
-        it 'renders error message' do
-          get :edit, { id: product.to_param, category_id: category.to_param }
-          expect(controller.flash[:error]).to eq 'You are not allowed to edit this product.'
-        end
-      end
-    end
-
-    describe 'PUT update' do
-      describe 'with valid params' do
-        it 'redirects to product page' do
-          put :update, { id: product.to_param, product: { 'title' => 'MyString' }, category_id: category.to_param }
-          expect(response).to redirect_to(category_product_url(category, product))
-        end
-
-        it 'does not update product' do
-          put :update, { id: product.to_param, product: { 'title' => 'MyNewString' }, category_id: category.to_param }
-          expect(controller.product.title).to_not eq 'MyNewString'
-        end
-
-        it 'renders error message' do
-          put :update, { id: product.to_param, product: { 'title' => 'MyString' }, category_id: category.to_param }
-          expect(controller.flash[:error]).to eq 'You are not allowed to edit this product.'
-        end
-      end
-    end
-  end
-
+  let(:category) { create(:category) }
+  let(:user) { create(:user) }
+  let(:valid_attributes) { {
+    title: 'MyString',
+    description: 'Some description',
+    price: 2.5,
+    category_id: category.id,
+    user_id: user.id # The controller doesn't permit this param anyway
+                     # and it makes the whole spec A LOT cleaner
+  } }
+  let! (:product) { Product.create! valid_attributes }
+  
   describe 'GET index' do
-    it 'expose all products' do
-      product = Product.create! valid_attributes
-      product.category = category
+    it 'exposes all products' do
       get :index, category_id: category.id
       expect(controller.products).to eq([product])
     end
   end
-
+  
   describe 'GET show' do
-    it 'expose the requested product' do
-      product = Product.create! valid_attributes
+    it 'exposes the requested product' do
       get :show, { id: product.to_param, category_id: category.to_param }
       expect(controller.product).to eq(product)
     end
   end
-
-  describe 'GET new' do
-    it 'expose a new product' do
-      get :new, { category_id: category.to_param }
-      expect(controller.product).to be_a_new(Product)
+  
+  context 'user is not signed in' do
+    before do
+      allow(controller).to receive(:user_signed_in?).and_return(false)
+      allow(controller).to receive(:current_user).and_return(nil)
+    end
+    
+    describe 'GET new' do
+      it 'redirects user to the login page' do
+        get :new, { category_id: category.to_param }
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+    
+    describe 'GET edit' do
+      it 'redirects user to the login page' do
+        get :edit, { id: product.to_param, category_id: category.to_param }
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+    
+    describe 'POST create' do
+      it 'redirects user to the login page' do
+        post :create, { product: valid_attributes, category_id: category.to_param }
+        expect(response).to redirect_to(new_user_session_path)
+      end
+      
+      it 'does not create a new product' do
+        expect {
+          post :create, { product: valid_attributes, category_id: category.to_param }
+        }.to_not change(Product, :count)
+      end
+    end
+    
+    describe 'PUT update' do
+      it 'redirects user to the login page' do
+        put :update, { id: product.to_param, product: { title: 'MyTitle' },
+            category_id: category.to_param }
+        expect(response).to redirect_to(new_user_session_path)
+      end
+      
+      it 'does not change the product' do
+        put :update, { id: product.to_param, product: { title: 'MyNewTitle' },
+            category_id: category.to_param }
+        expect(controller.product.title).not_to eq 'MyNewTitle'
+      end
+    end
+    
+    describe 'DELETE destroy' do
+      it 'redirects user to the login page' do
+        delete :destroy, { id: product.to_param, category_id: category.to_param }
+        expect(response).to redirect_to(new_user_session_path)
+      end
+      
+      it 'does not delete the product' do
+        expect {
+          delete :destroy, { id: product.to_param, category_id: category.to_param }
+        }.to_not change(Product, :count)
+      end
     end
   end
-
-  describe 'GET edit' do
-    it 'expose the requested product' do
-      product = Product.create! valid_attributes
-      get :edit, { id: product.to_param, category_id: category.to_param }
-      expect(controller.product).to eq(product)
+  
+  context 'another user is signed in' do
+    let (:user2) { create(:user) }
+    
+    before do
+      sign_in user2
+      allow(controller).to receive(:user_signed_in?).and_return(true)
+      allow(controller).to receive(:authenticate_user!).and_return(user2)
+      allow(controller).to receive(:current_user).and_return(user2)
+    end
+    
+    describe 'GET edit' do
+      it 'redirects user to the product page' do
+        get :edit, { id: product.to_param, category_id: category.to_param }
+        expect(response).to redirect_to category_product_url(category, product)
+      end
+      
+      it 'renders an error message' do
+        get :edit, { id: product.to_param, category_id: category.to_param }
+        expect(controller.flash[:error]).to eq 'You are not allowed to edit this product.'
+      end
+    end
+    
+    describe 'PUT update' do
+      it 'redirects user to the product page' do
+        put :update, { id: product.to_param, product: { title: 'MyTitle' },
+            category_id: category.to_param }
+        expect(response).to redirect_to category_product_url(category, product)
+      end
+      
+      it 'does not update the product' do
+        put :update, { id: product.to_param, product: { title: 'MyNewTitle' },
+            category_id: category.to_param }
+        expect(controller.product.title).to_not eq 'MyNewTitle'
+      end
+      
+      it 'renders an error message' do
+        put :update, { id: product.to_param, product: { title: 'MyTitle' },
+            category_id: category.to_param }
+        expect(controller.flash[:error]).to eq 'You are not allowed to edit this product.'
+      end
+    end
+    
+    describe 'DELETE destroy' do
+      it 'redirects user to the product page' do
+        delete :destroy, { id: product.to_param, category_id: category.to_param }
+        expect(response).to redirect_to category_product_url(category, product)
+      end
+      
+      it 'does not destroy the product' do
+        expect {
+          delete :destroy, { id: product.to_param, category_id: category.to_param }
+        }.to_not change(Product, :count)
+      end
+      
+      it 'renders an error message' do
+        delete :destroy, { id: product.to_param, category_id: category.to_param }
+        expect(controller.flash[:error]).to eq 'You are not allowed to edit this product.'
+      end
     end
   end
-
-  describe 'POST create' do
-    describe 'with valid params' do
-      context 'user is signed in' do
-        let(:user) { create(:user) }
-        let(:product) { Product.create! valid_attributes }
-
-        before do
-          sign_in user
-          controller.stub(:user_signed_in?).and_return(true)
-          controller.stub(:current_user).and_return(user)
-          controller.stub(:authenticate_user!).and_return(user)
-          product.user = user
-        end
-
-        it 'creates a new Product' do
+  
+  context 'user is signed in' do
+    before do
+      sign_in user
+      allow(controller).to receive(:user_signed_in?).and_return(true)
+      allow(controller).to receive(:authenticate_user!).and_return(user)
+      allow(controller).to receive(:current_user).and_return(user)
+    end
+    
+    describe 'GET new' do
+      it 'exposes a new product' do
+        get :new, { category_id: category.to_param }
+        expect(controller.product).to be_a_new(Product)
+      end
+    end
+    
+    describe 'GET edit' do
+      it 'exposes the requested product' do
+        get :edit, { id: product.to_param, category_id: category.to_param }
+        expect(controller.product).to eq(product)
+      end
+    end
+    
+    describe 'POST create' do
+      describe 'with valid params' do
+        it 'creates a new product' do
           expect {
-            post :create, { product: valid_attributes, category_id: category.to_param }
+            post :create, { category_id: category.to_param, product: valid_attributes }
           }.to change(Product, :count).by(1)
         end
-
-        it 'expose a newly created product' do
-          post :create, { product: valid_attributes, category_id: category.to_param }
+        
+        it "redirects to the created product's page" do
+          post :create, { category_id: category.to_param, product: valid_attributes }
+          expect(response).to redirect_to(category_product_url(category, Product.last))
+        end
+        
+        it 'exposes the created product' do
+          post :create, { category_id: category.to_param, product: valid_attributes }
           expect(controller.product).to be_a(Product)
           expect(controller.product).to be_persisted
         end
-
-        it 'redirects to the created product' do
-          post :create, { product: valid_attributes, category_id: category.to_param }
-          expect(response).to redirect_to(category_product_url(category, Product.last))
+      end
+      
+      describe 'with invalid params' do
+        it 'does not create a new product' do
+          expect {
+            post :create, { category_id: category.to_param, product: {title: "some_title"} }
+          }.to_not change(Product, :count)
         end
-
-        describe 'with invalid params' do
-          it 'expose a newly created but unsaved product' do
-
-            Product.any_instance.stub(:save).and_return(false)
-            post :create, { product: { 'title' => 'invalid value' }, category_id: category.to_param }
-            expect(controller.product).to be_a_new(Product)
-          end
-
-          it "re-renders the 'new' template" do
-            Product.any_instance.stub(:save).and_return(false)
-            post :create, { product: { 'title' => 'invalid value' }, category_id: category.to_param }
-            expect(response).to render_template('new')
-          end
+        
+        it 're-renders the "new" template' do
+          allow_any_instance_of(Product).to receive(:save).and_return(false)
+          post :create, { category_id: category.to_param, product: { title: 'invalid_title' } }
+          expect(response).to render_template('new')
+        end
+        
+        it 'exposes the newly created but unsaved product' do
+          allow_any_instance_of(Product).to receive(:save).and_return(false)
+          post :create, { category_id: category.to_param, product: { title: 'invalid_title' } }
+          expect(controller.product).to be_a_new(Product)
         end
       end
     end
-  end
-
-  describe 'PUT update' do
-    context 'user is signed in' do
-      let(:user) { create(:user) }
-      let(:product) { Product.create! valid_attributes }
-
-      before do
-        sign_in user
-        controller.stub(:user_signed_in?).and_return(true)
-        controller.stub(:current_user).and_return(user)
-        controller.stub(:authenticate_user!).and_return(user)
-        product.user = user
-      end
-
+    
+    describe 'PUT update' do
       describe 'with valid params' do
         it 'updates the requested product' do
-          Product.any_instance.stub(:save).and_return(true)
-          put :update, { id: product.to_param, product: { 'title' => 'New value' }, category_id: category.to_param }
-          expect(response).to redirect_to(category_product_path(category, product))
+          expect {
+            put :update, { id: product.to_param, category_id: category.to_param,
+                product: { title: 'MyNewTitle' } }
+            product.reload
+          }.to change{ product.title }.from('MyString').to('MyNewTitle')
         end
-
-        it 'expose the requested product' do
-          put :update, { id: product.to_param, product: valid_attributes, category_id: category.to_param }
-          expect(controller.product).to eq(product)
-        end
-
-        it 'redirects to the product' do
-          put :update, { id: product.to_param, product: valid_attributes, category_id: category.to_param }
+        
+        it 'redirects to the updated product page' do
+          allow_any_instance_of(Product).to receive(:save).and_return(true)
+          put :update, { id: product.to_param, category_id: category.to_param,
+              product: { title: 'MyNewTitle' } }
           expect(response).to redirect_to(category_product_url(category, product))
+        end
+        
+        it 'exposes the updated product' do
+          allow_any_instance_of(Product).to receive(:save).and_return(true)
+          put :update, { id: product.to_param, category_id: category.to_param,
+              product: { title: 'MyNewTitle' } }
+          expect(controller.product).to eq(product)
         end
       end
-
+      
       describe 'with invalid params' do
-        it 'expose the product' do
-          Product.any_instance.stub(:save).and_return(false)
-          put :update, { id: product.to_param, product: { 'title' => 'invalid value' }, category_id: category.to_param }
-          expect(controller.product).to eq(product)
+        let(:user2) { create(:user) }
+        
+        it 'does not update the product' do
+          expect {
+            put :update, { id: product.to_param, product: { user_id: user2.to_param },
+              category_id: category.to_param }
+            product.reload
+          }.to_not change(product, :user)
         end
-
-        it "re-renders the 'edit' template" do
-          Product.any_instance.stub(:save).and_return(false)
-          put :update, { id: product.to_param, product: { 'title' => 'invalid value' }, category_id: category.to_param }
-          expect(response).to redirect_to(category_product_url(category, product))
+        
+        it 're-render the "edit" template' do
+          allow_any_instance_of(Product).to receive(:save).and_return(false)
+          put :update, { id: product.to_param, product: { title: 'invalid_title' },
+              category_id: category.to_param }
+          expect(response).to render_template('edit')
+        end
+        
+        it 'exposes the product' do
+          allow_any_instance_of(Product).to receive(:save).and_return(false)
+          put :update, { id: product.to_param, product: { title: 'invalid_title' },
+              category_id: category.to_param }
+          expect(controller.product).to eq(product)
         end
       end
     end
-  end
-
-  describe 'DELETE destroy' do
-    let(:user) { create(:user) }
-    let(:category) { create(:category) }
-    let(:product) { create(:product, user: user, category: category) }
-
-    context 'user is signed in' do
-      before do
-        sign_in user
-        controller.stub(:user_signed_in?).and_return(true)
-        controller.stub(:current_user).and_return(user)
-        controller.stub(:authenticate_user!).and_return(user)
-        product.user = user
-      end
-
+    
+    describe 'DELETE destroy' do
       it 'destroys the requested product' do
         expect {
           delete :destroy, { id: product.to_param, category_id: category.to_param }
         }.to change(Product, :count).by(-1)
       end
-
+      
       it 'redirects to the category page' do
         delete :destroy, { id: product.to_param, category_id: category.to_param }
         expect(response).to redirect_to(category_url(category))
       end
     end
-
-    context 'user is not signed in' do
-      it 'redirects user to login page' do
-        delete :destroy, { id: product.to_param, category_id: category.to_param }
-        expect(response).to redirect_to(new_user_session_path)
-      end
-    end
   end
-
 end

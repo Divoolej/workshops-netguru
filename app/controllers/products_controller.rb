@@ -1,4 +1,6 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user!, only: [:edit, :new, :create, :update, :destroy]
+  before_action :check_product_ownership!, only: [:edit, :update, :destroy]
   expose(:category)
   expose(:products)
   expose(:product)
@@ -20,6 +22,7 @@ class ProductsController < ApplicationController
   def create
     self.product = Product.new(product_params)
 
+    self.product.user = current_user
     if product.save
       category.products << product
       redirect_to category_product_url(category, product), notice: 'Product was successfully created.'
@@ -39,12 +42,18 @@ class ProductsController < ApplicationController
   # DELETE /products/1
   def destroy
     product.destroy
-    redirect_to category_url(product.category), notice: 'Product was successfully destroyed.'
+    redirect_to category_url(category), notice: 'Product was successfully destroyed.'
   end
 
   private
+    def product_params
+      params.require(:product).permit(:title, :description, :price, :category_id)
+    end
 
-  def product_params
-    params.require(:product).permit(:title, :description, :price, :category_id)
-  end
+    def check_product_ownership!
+      unless product.user == current_user
+        flash[:error] = 'You are not allowed to edit this product.'
+        redirect_to category_product_url(category, product)
+      end
+    end
 end
