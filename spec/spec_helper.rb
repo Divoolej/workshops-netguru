@@ -2,7 +2,11 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
+
+# require 'rspec/autorun' # Since I don't need this one and it raises
+                          # deprecation errors, I'm commenting it.
+                          # I'm not sure what it was used for in the first place.
+
 require 'database_cleaner'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
