@@ -7,17 +7,19 @@ describe CategoriesController do
   let(:valid_session) { {} }
 
   let(:user) { build(:user) }
+  
+  let!(:category) { Category.create! name: 'MyCategory' }
 
   before do
     sign_in user
-    controller.stub(:user_signed_in?).and_return(true)
-    controller.stub(:current_user).and_return(user)
-    controller.stub(:authenticate_user!).and_return(user)
+    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive(:current_user).and_return(user)
+    allow(controller).to receive(:authenticate_user!).and_return(user)
   end
 
   context 'user is not an admin' do
     before do
-      controller.current_user.stub(admin?: false)
+      allow(controller.current_user).to receive(:admin?).and_return(false)
     end
 
     describe 'GET new' do
@@ -29,7 +31,6 @@ describe CategoriesController do
 
     describe 'GET edit' do
       it 'redirects user to the login page' do
-        category = Category.create! valid_attributes
         get :edit, { id: category.to_param }, valid_session
         expect(response).to redirect_to(new_user_session_path)
       end
@@ -43,9 +44,15 @@ describe CategoriesController do
     end
 
     describe 'PUT update' do
-      it 'redirect user to the login page' do
-        category = Category.create! valid_attributes
+      it 'redirects user to the login page' do
         put :update, {:id => category.to_param, :category => { 'name' => 'MyString'}}, valid_session
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+    
+    describe 'DELETE destroy' do
+      it 'redirects the user to the login page' do
+        delete :destroy, {:id => category.to_param}, valid_session
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -53,20 +60,18 @@ describe CategoriesController do
 
   context 'user is an admin' do
     before do
-      controller.current_user.stub(admin?: true)
+      allow(controller.current_user).to receive(:admin?).and_return(true)
     end
 
     describe 'GET index' do
       it 'exposes all categories' do
-        category = Category.create! valid_attributes
         get :index, {}, valid_session
-        expect(controller.categories).to eq([category])
+        expect(controller.categories).to include(category)
       end
     end
 
     describe 'GET show' do
       it 'exposes the requested category' do
-        category = Category.create! valid_attributes
         get :show, { id: category.to_param }, valid_session
         expect(controller.category).to eq(category)
       end
@@ -81,7 +86,6 @@ describe CategoriesController do
 
     describe 'GET edit' do
       it 'exposes the requested category' do
-        category = Category.create! valid_attributes
         get :edit, { id: category.to_param }, valid_session
         expect(controller.category).to eq(category)
       end
@@ -109,13 +113,13 @@ describe CategoriesController do
 
       describe 'with invalid params' do
         it 'exposes a newly created but unsaved category' do
-          Category.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Category).to receive(:save).and_return(false)
           post :create, {category: { 'name' => 'invalid value'}}, valid_session
           expect(controller.category).to be_a_new(Category)
         end
 
         it "re-renders the 'new' template" do
-          Category.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Category).to receive(:save).and_return(false)
           post :create, {category: { 'name' => 'invalid value'}}, valid_session
           expect(response).to render_template('new')
         end
@@ -123,10 +127,9 @@ describe CategoriesController do
     end
 
     describe 'PUT update' do
-      let(:category) { Category.create! valid_attributes }
       describe 'with valid params' do
         it 'updates the requested category' do
-          Category.any_instance.should_receive(:update).with({ 'name' => 'MyString'})
+          expect_any_instance_of(Category).to receive(:update).with({ 'name' => 'MyString'})
           put :update, {:id => category.to_param, :category => { 'name' => 'MyString'}}, valid_session
         end
 
@@ -137,28 +140,26 @@ describe CategoriesController do
 
         it 'redirects to the category' do
           put :update, {:id => category.to_param, :category => valid_attributes}, valid_session
-          response.should redirect_to(category)
+          expect(response).to redirect_to(category)
         end
       end
 
       describe 'with invalid params' do
         it 'exposes the category' do
-          Category.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Category).to receive(:save).and_return(false)
           put :update, {:id => category.to_param, :category => { 'name' => 'invalid value'}}, valid_session
           expect(controller.category).to eq(category)
         end
 
         it "re-renders the 'edit' template" do
-          Category.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Category).to receive(:save).and_return(false)
           put :update, {:id => category.to_param, :category => { 'name' => 'invalid value'}}, valid_session
-          response.should render_template('edit')
+          expect(response).to render_template('edit')
         end
       end
     end
 
     describe 'DELETE destroy' do
-      let!(:category) { Category.create! valid_attributes }
-
       it 'destroys the requested category' do
         expect {
           delete :destroy, {:id => category.to_param}, valid_session
@@ -167,7 +168,7 @@ describe CategoriesController do
 
       it 'redirects to the categories list' do
         delete :destroy, {:id => category.to_param}, valid_session
-        response.should redirect_to(categories_url)
+        expect(response).to redirect_to(categories_url)
       end
     end
   end
