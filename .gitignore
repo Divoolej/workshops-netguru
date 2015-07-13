@@ -20,6 +20,7 @@ config/database.yml
 .powenv
 .env
 .rvmrc
+.ruby-gemset
 .powrc
 
 logfile
