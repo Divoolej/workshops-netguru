@@ -35,9 +35,9 @@ Setup the database for your application (development and test environments):
 
 4. ~~Next up: `Product` model and `spec/models/product_spec.rb`. Play with validations a bit, calculate average rating and you'll be good to go.~~
 
-5. Fix specs for `Category` model.
+5. ~~Fix specs for `Category` model.~~
 
-6. Fix specs for `Review` model.
+6. ~~Fix specs for `Review` model.~~
 
 7. You'll have to deal with `ProductsController`. Again, you'll have to check for permissions. Only a product owner should be able to make changes. Make sure to give the user a proper message when they try to perform forbidden actions.
 
