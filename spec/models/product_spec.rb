@@ -5,6 +5,10 @@ describe Product do
     it { should validate_presence_of :title }
     it { should validate_presence_of :description }
     it { should validate_presence_of :price }
+    it { should validate_presence_of :category }
+    it { should validate_presence_of :user }
+    it { should belong_to            :user }
+    it { should belong_to            :category }
 
     describe '#price' do
       let(:product) { build(:product, price: 1.234) }
@@ -17,8 +21,8 @@ describe Product do
     describe '#average_rating' do
       let(:user)    { create(:user) }
       let(:product) { create(:product) }
-      let(:review1) { create(:review, rating: 2, user: user) }
-      let(:review2) { create(:review, rating: 3, user: user) }
+      let(:review1) { create(:review, rating: 2, user: user, product: product) }
+      let(:review2) { create(:review, rating: 3, user: user, product: product) }
 
       before do
         product.reviews << [review1, review2]

@@ -6,5 +6,6 @@ FactoryGirl.define do
     lastname 'Doe'
     email { FFaker::Internet.email }
     password 'password123'
+    confirmed_at { Date.today }
   end
 end
