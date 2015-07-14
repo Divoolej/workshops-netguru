@@ -42,7 +42,8 @@ admin = User.create! firstname: "The",
              lastname: "Admin",
              email: "admin@app.com",
              password: "rootpassword",
-             confirmed_at: confirmation_date
+             confirmed_at: confirmation_date,
+             admin: true
 
 category1 = Category.create! name: "Books"
 category2 = Category.create! name: "Awesome Things"
