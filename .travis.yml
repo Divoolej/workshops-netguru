@@ -1,16 +1,16 @@
 language: ruby
 rvm:
-  - 2.1.5
+- 2.1.5
 deploy:
   provider: heroku
   api_key:
-    secure: $API_SECRET
+    secure: NsMgemQIB50QD1IJe9zeGqZmWq9qMCPbEZAj1aQhZS6gcpug+XP2zEmfzHNOz6F3yc/6cLC/rKfTjnBcOhYprleREzIngHEzCy9tZiOP7Fjk57YgPBd5AULrLKjiMAmtY4JPHvu9TYok7AER4OwMHqVgnooTd9qxqmDOK4j/A5z94xed3Xc6ZnAF/KvLVg9tR4/MqZAiC2LYhGlzhMD35F8T5zx3ZTPMoRlMoTQflw+NZpd4KjoIKU05dOlj34XQlCryGfgWM4zXjmRvcd5CKG50FLbxvPfJ71DAYu1Hl8dYA6GHrFVxu/+m1un8wc9JJRxpivV0je7PoaeDYhe87EXkPSMZAbPkPYz65h8pF17yR09fm3lR/9xfB7TorNdT9Uz3WHGVd8j2pVqLICrl37LaTISCHWYl/meMfTmSLkOvJlew9PHo/7lOjyM6VJoiyxXXG/cMYuMS4LQMWNqftO0LFn+hdw/V5oRulWPY1r3SaRdeoztLp5PZhum2UB7RzBqArugiZElhz27/oAlsvew4a73F6Z7r5f22QPnvjhHFOfoZc0DnBr8UgCke8vofhQ3MZpYKoThJ+x9xkpVUVHVYxQdarvSUERsJD0ct1J8S7TwzCfd37m+NdLtz8845osxbL7XxhPy0jXQcPzuEXQAdytSbLMhPtG6Ah2l0jpI=
   run:
-    - 'rake db:migrate'
-  app: $HEROKU_APP_NAME
+  - rake db:migrate
+  app: divoolej-netguru-workshops
   on:
     repo: Divoolej/workshops-netguru
 before_script:
-  - cp config/database.yml.travis config/database.yml
-  - psql -c 'create database travis_ci_test;' -U postgres
-  - bundle exec rake db:migrate
+- cp config/database.yml.travis config/database.yml
+- psql -c 'create database travis_ci_test;' -U postgres
+- bundle exec rake db:migrate
