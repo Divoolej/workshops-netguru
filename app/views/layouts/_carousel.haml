@@ -1,0 +1,21 @@
+.container-fluid.hidden-xs
+  #outerCarousel.carousel.slide
+    .carousel-inner
+      .item.active
+        %h1 CATEGORIES
+        #innerCarousel.carousel.slide{'data-ride' => 'carousel'}
+          .carousel-inner
+            .item.active
+              %h4 Awesome Things (15) (14$ - 149$)
+            .item
+              %h4 Programming Languages (9) (0$ - 199$)
+            .item
+              %h4 Apple Stuff (2) (9999$ - 25999$)
+        %br
+    %a{href: '#innerCarousel', class: 'carousel-control left', 'data-slide' => 'prev'}
+      .glyphicon.glyphicon-chevron-left
+    %a{href: '#innerCarousel', class: 'carousel-control right', 'data-slide' => 'next'}
+      %span.glyphicon.glyphicon-chevron-right
+.container-fluid.hidden-sm.hidden-md.hidden-lg
+  .jumbotron
+    %h1 CATEGORIES

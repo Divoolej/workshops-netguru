@@ -47,9 +47,9 @@ Setup the database for your application (development and test environments):
 
 10. If some actions (like links to edit a page, create a new one) are not allowed for a particular user then please hide them in a template (for example with `if`).
 
-11. In navigation bar insert links for guest users to login / signup and for users that are already logged in - to logout.
+11. ~~In navigation bar insert links for guest users to login / signup and for users that are already logged in - to logout.~~
 
-12. Don't forget to check if application works in the browser :).
+12. ~~Don't forget to check if application works in the browser :).~~
 
 13. Unleash your design skills. Add some CSS to the application to make it prettier (we won't say it's ugly, but you know, it's not a beauty [YET!]). Please use [Bootstrap 3](http://getbootstrap.com/css/) for styling, which is already added to application. Psss! Don't forget about styling `devise` views :).
 
@@ -57,9 +57,9 @@ Setup the database for your application (development and test environments):
 
 15. On user profile list 5 last user's reviews with formated date (dd-mm-yy).
 
-16. Fill `seeds.rb` with 5 accounts for user and one admin account to login and example category with products and reviews.
+16. ~~Fill `seeds.rb` with 5 accounts for user and one admin account to login and example category with products and reviews.~~
 
-17. Make sure your project is available on Heroku with **seeds data**.
+17. ~~Make sure your project is available on Heroku with **seeds data**.~~
 
 ## What disqualifies your application
 

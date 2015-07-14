@@ -1,1 +1,42 @@
 @import "bootstrap";
+// $carousel-color: #71919C;
+// $navbar-color: #131A1A;
+// $background-color: #D0DFE1;
+$carousel-text-color: #fff;
+$carousel-color: #9CB1C7;
+// $carousel-text-color: #454B31;
+$navbar-color: #24281F;
+$background-color: #DDE1E7;
+
+body {
+  background-color: $background-color;
+}
+
+.carousel {
+  background-color: $carousel-color;
+  border-radius: 10px;
+}
+
+.carousel-control {
+  background-image:none !important;
+  filter:none !important;
+  opacity: 1;
+}
+
+.header, .footer {
+  background-color: $navbar-color;
+}
+
+.item {
+  color: $carousel-text-color;
+  text-align: center;
+  
+  h1 {
+    letter-spacing: 7px;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+  }
+  
+  h4 {
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+  }
+}
