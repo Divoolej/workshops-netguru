@@ -1,7 +1,7 @@
-%h1 Editing category
-
-= render 'form'
-
-= link_to 'Show', category
-\|
-= link_to 'Back', categories_path, class: 'btn btn-primary'
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    .jumbotron.hidden-xs
+      %h2.jumbo-header EDITING CATEGORY
+    .jumbotron.visible-xs
+      %h2 EDITING CATEGORY
+    = render 'form'

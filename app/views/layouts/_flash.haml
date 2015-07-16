@@ -1,0 +1,12 @@
+- if flash[:notice]
+  .container
+    .row
+      .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+        .alert.alert-info
+          %p= flash[:notice]
+- if flash[:error]
+  .container
+    .row
+      .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+        .alert.alert-danger
+          %p= flash[:error]

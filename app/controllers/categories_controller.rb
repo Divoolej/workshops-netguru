@@ -2,8 +2,9 @@ class CategoriesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy]
   before_action :check_admin_rights!, only: [:new, :edit, :create, :update, :destroy]
 
-  expose(:categories)
+  expose_decorated(:categories)
   expose(:category)
+  expose_decorated(:products, ancestor: :category)
   expose(:product) { Product.new }
 
   def index
@@ -47,6 +48,6 @@ class CategoriesController < ApplicationController
     end
 
     def check_admin_rights!
-      redirect_to new_user_session_path unless current_user.admin?
+      redirect_to new_user_session_path, error: 'You are not allowed to perform this action.' unless current_user.admin?
     end
 end

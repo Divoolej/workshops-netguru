@@ -1,21 +1,74 @@
-%h1 Listing categories
-
-%table.table
-  %tr
-    %th Name
-    %th
-    %th
-    %th
-
-  - categories.each do |category|
-    %tr
-      %td= category.name
-      %td= link_to 'Show', category
-      - if user_signed_in? and current_user.admin?
-        %td= link_to 'Edit', edit_category_path(category)
-        %td= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' }
-
-%br
-
-- if user_signed_in? and current_user.admin?
-  = link_to 'New Category', new_category_path
+= render partial: 'layouts/carousel', locals: { carousel_for: categories, carousel_header: "CATEGORIES" }
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    - if user_signed_in? and current_user.admin?
+      = link_to 'New Category', new_category_path, class: "btn btn-sm btn-block btn-default"
+      %br
+    - categories.each do |category|
+      .panel.panel-default
+        .panel-heading
+          %p.panel-title= category.name
+        %table.table
+          %thead
+            %tr
+              %th{ colspan: 2, class: "col-sm-5" }
+                Info
+              %th.col-xs-7
+                Top Products
+          %tbody
+            %tr
+              %th{ scope: "row" }
+                Number of products:
+              %td= category.products.count
+              %td.centered
+                - unless category.first_top_product.nil?
+                  = category.first_top_product.title
+                  (
+                  - category.first_top_product.average_rating.round.times do
+                    %span.glyphicon.glyphicon-star
+                  - (5 - category.first_top_product.average_rating.round).times do
+                    %span.glyphicon.glyphicon-star-empty
+                  )
+            %tr
+              %th{ scope: "row" }
+                Lowest price:
+              %td
+                = category.lowest_price
+              %td.centered
+                - unless category.second_top_product.nil?
+                  = category.second_top_product.title
+                  (
+                  - category.second_top_product.average_rating.round.times do
+                    %span.glyphicon.glyphicon-star
+                  - (5 - category.second_top_product.average_rating.round).times do
+                    %span.glyphicon.glyphicon-star-empty
+                  )
+            %tr
+              %th{ scope: "row" }
+                Highest price:
+              %td
+                = category.highest_price
+              %td.centered
+                -unless category.third_top_product.nil?
+                  = category.third_top_product.title
+                  (
+                  - category.third_top_product.average_rating.round.times do
+                    %span.glyphicon.glyphicon-star
+                  - (5 - category.third_top_product.average_rating.round).times do
+                    %span.glyphicon.glyphicon-star-empty
+                  )
+            %tr
+              %td{ colspan: 3 }
+                .row
+                  - if user_signed_in? and current_user.admin?
+                    .col-xs-4
+                      = link_to 'Edit', edit_category_path(category), class: "btn btn-xs btn-default btn-block"
+                    .col-xs-4
+                      = link_to 'Show', category_path(category), class: "btn btn-xs btn-default btn-block"
+                    .col-xs-4
+                      = link_to 'Delete', category_path(category), method: :delete, data: {confirm: "Are you sure? Products and reviews will be deleted too."}, class: "btn btn-xs btn-default btn-block"
+                  - else
+                    .col-xs-4.col-xs-offset-4
+                      = link_to 'Show', category_path(category), class: "btn btn-xs btn-default btn-block"
+              
+              

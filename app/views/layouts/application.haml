@@ -10,12 +10,7 @@
 
   %body
     = render 'layouts/header'
-    .container-fluid
-      .row
-        .col-lg-2.col-md-1
-        .col-lg-8.col-md-10
-          = render 'layouts/carousel'
-          .container-fluid
-            = yield
-        .col-lg-2.col-md-1
+    = render 'layouts/flash'
+    .container
+      = yield
     = render 'layouts/footer'

@@ -4,17 +4,45 @@
 // $background-color: #D0DFE1;
 $carousel-text-color: #fff;
 $carousel-color: #9CB1C7;
+$carousel-border-color: #DDE1E7;
+$panel-border-color: #DDE1E7;
 // $carousel-text-color: #454B31;
 $navbar-color: #24281F;
 $background-color: #DDE1E7;
+$panel-heading-color: #9CB1C7;
 
 body {
   background-color: $background-color;
+  margin-bottom: 50px;
+}
+
+.jumbotron {
+  background-color: $carousel-color;
+  text-align: center;
+  h2 {
+    color: $carousel-text-color;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+  }
+  
+  h1 {
+    letter-spacing: 7px;
+    color: $carousel-text-color;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.jumbo-header {
+  letter-spacing: 5px;
+  font-size: 35px;
 }
 
 .carousel {
   background-color: $carousel-color;
   border-radius: 10px;
+}
+
+#outerCarousel {
+  border: 1px solid $carousel-border-color !important;
 }
 
 .carousel-control {
@@ -38,5 +66,67 @@ body {
   
   h4 {
     text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+    
+    &:hover {
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+    }
+  }
+  
+  a {
+    color: inherit;
+    text-decoration: none;
   }
 }
+
+.table {
+  thead {
+    th {
+      text-align: center;
+    }
+  }
+}
+
+.panel {
+  border: 1px solid $panel-border-color;
+}
+
+.panel-heading {
+  text-align: center;
+  background-color: $panel-heading-color !important;
+}
+
+.panel-title {
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+}
+
+.centered, .centered-with-border {
+  text-align: center;
+}
+
+.centered-with-border {
+  border: 1px $background-color solid;
+}
+
+.btn-default {
+  color: white;
+  text-decoration: none;
+  background-color: #6B7789;
+  border: none;
+  border-radius: 10px;
+  
+  &:hover {
+    background-color: #545962;
+    color: white;
+  }
+}
+
+
+#notice { background-color: #A4E7A0; border: 1px solid #26722D; }
+#error { background-color: #F0A8A8; border: 1px solid #900; }
+#notice, #error { width: 90%; margin: 0 auto 10px auto; padding: 5px; }
+#notice p, #error p { margin-left: 20px; padding: 0; font-size: .75em; color: #000; }
+#notice a, #error a { text-decoration: none; padding: 0 3px; }
+#notice a { border: 1px solid #26722D; color: #26722D; }
+#error a { border: 1px solid #900; color: #900; }
+#notice a:hover, #error a:hover { color: #333; border: 1px solid #333; }
