@@ -1,7 +1,7 @@
 .row
   .panel.panel-default
     .panel-heading.review-heading
-      %p.panel-title= review.author
+      %p.panel-title= link_to review.author, user_path(review.user)
     .panel-body
       %p= review.content
     .panel-footer

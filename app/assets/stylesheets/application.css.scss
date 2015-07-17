@@ -94,6 +94,12 @@ body {
 .panel-heading {
   text-align: center;
   background-color: $panel-heading-color !important;
+  
+  a {
+    &:hover {
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+    }
+  }
 }
 
 .review-heading {

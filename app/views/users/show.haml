@@ -1,0 +1,57 @@
+= render partial: 'layouts/carousel', locals: { carousel_for: products, carousel_header: user.name }
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    .panel.panel-default
+      .panel-heading
+        %p.panel-title Info
+      %table.table
+        %tbody
+          %tr
+            %th.col-sm-4.col-xs-6{ scope: 'row' } Email:
+            %td.col-sm-8.col-xs-6= user.email
+          %tr
+            %th Joined:
+            %td= user.created_at.to_date
+          %tr
+            %th Number of products:
+            %td= user.products.count
+          %tr
+            %th Number of reviews:
+            %td= user.reviews.count
+          %tr
+            %th Top product:
+            %td= user.top_product
+%br
+- unless reviews.empty?
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+      .panel.panel-default
+        .panel-heading
+          %p.panel-title Latest reviews
+        .panel-body
+          %br
+          .row
+            .col-sm-10.col-sm-offset-1
+              .container-fluid
+                - reviews.order(created_at: :desc)[0..4].each do |review|
+                  .row
+                    .panel.panel-default
+                      .panel-heading.review-heading
+                        %p.panel-title= link_to review.product.title, category_product_path(review.product.category, review.product)
+                      .panel-body
+                        %p= review.content
+                      .panel-footer
+                        .row
+                          .col-xs-9
+                            - review.rating.times do
+                              %span.glyphicon.glyphicon-star
+                            - (5 - review.rating).times do
+                              %span.glyphicon.glyphicon-star-empty
+                          - if current_user == review.user
+                            .col-xs-3
+                              = link_to 'Delete', category_product_review_path(review.product.category, review.product, review), method: :delete, class: "btn btn-default btn-xs btn-block pull-right"
+- else
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+      .well.well-lg
+        This user hasn't written any reviews yet!
