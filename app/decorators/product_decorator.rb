@@ -28,15 +28,19 @@ class ProductDecorator < Draper::Decorator
   
   def latest_review
     review = reviews.order(created_at: :desc).first
-    text = "<em>\"#{review.content}\"</em>"
-    stars = ""
-    review.rating.times do
-      stars += '<span class="glyphicon glyphicon-star"></span>'
+    unless review.nil?
+      text = "<em>\"#{review.content}\"</em>"
+      stars = ""
+      review.rating.times do
+        stars += '<span class="glyphicon glyphicon-star"></span>'
+      end
+      (5 - review.rating).times do
+        stars += '<span class="glyphicon glyphicon-star-empty"></span>'
+      end
+      return h.raw "#{text} (#{stars})"
+    else
+      return h. raw '<em>No reviews yet.</em>'
     end
-    (5 - review.rating).times do
-      stars += '<span class="glyphicon glyphicon-star-empty"></span>'
-    end
-    return h.raw "#{text} (#{stars})"
   end
 
 end

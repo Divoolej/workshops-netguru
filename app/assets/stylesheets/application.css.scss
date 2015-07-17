@@ -6,6 +6,7 @@ $carousel-text-color: #fff;
 $carousel-color: #9CB1C7;
 $carousel-border-color: #DDE1E7;
 $panel-border-color: #DDE1E7;
+$review-heading-color: #6B7789;
 // $carousel-text-color: #454B31;
 $navbar-color: #24281F;
 $background-color: #DDE1E7;
@@ -13,7 +14,7 @@ $panel-heading-color: #9CB1C7;
 
 body {
   background-color: $background-color;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
 }
 
 .jumbotron {
@@ -32,7 +33,7 @@ body {
 }
 
 .jumbo-header {
-  letter-spacing: 5px;
+  letter-spacing: 7px;
   font-size: 35px;
 }
 
@@ -95,6 +96,10 @@ body {
   background-color: $panel-heading-color !important;
 }
 
+.review-heading {
+  background-color: $review-heading-color !important;
+}
+
 .panel-title {
   color: #fff;
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
@@ -120,13 +125,3 @@ body {
     color: white;
   }
 }
-
-
-#notice { background-color: #A4E7A0; border: 1px solid #26722D; }
-#error { background-color: #F0A8A8; border: 1px solid #900; }
-#notice, #error { width: 90%; margin: 0 auto 10px auto; padding: 5px; }
-#notice p, #error p { margin-left: 20px; padding: 0; font-size: .75em; color: #000; }
-#notice a, #error a { text-decoration: none; padding: 0 3px; }
-#notice a { border: 1px solid #26722D; color: #26722D; }
-#error a { border: 1px solid #900; color: #900; }
-#notice a:hover, #error a:hover { color: #333; border: 1px solid #333; }

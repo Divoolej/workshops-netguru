@@ -3,8 +3,8 @@ class ProductsController < ApplicationController
   before_action :check_product_ownership!, only: [:edit, :update, :destroy]
   
   expose(:category)
-  expose_decorated(:products)
-  expose(:product)
+  expose_decorated(:products) { Product.all.order title: :asc }
+  expose_decorated(:product)
   expose(:review) { Review.new }
   expose_decorated(:reviews, ancestor: :product)
 
@@ -22,7 +22,7 @@ class ProductsController < ApplicationController
 
   def create
     self.product = Product.new(product_params)
-
+    self.product.category = category
     self.product.user = current_user
     if product.save
       category.products << product

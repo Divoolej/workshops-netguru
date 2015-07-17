@@ -1,14 +1,25 @@
-= simple_form_for [category, product, review] do |f|
-  - if review.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(review.errors.count, "error")} prohibited this review from being saved:"
-      %ul
-        - review.errors.full_messages.each do |msg|
-          %li= msg
-  .form-group
-    = f.label :content
-    = f.text_area :content, class: 'form-control'
-  .form-group
-    = f.input :rating, collection: 1..5, class: 'form-control'
-
-  = f.submit 'Save', class: 'btn btn-default'
+#reviewModal.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button{ type: 'button', class: 'close', 'data-dismiss' => 'modal', 'aria-hidden' => 'true' }
+          &times;
+        %h4.modal-title
+          New review
+      = simple_form_for [category, product, review] do |f|
+        .modal-body
+          - if review.errors.any?
+            #error_explanation
+              %h2= "#{pluralize(review.errors.count, "error")} prohibited this review from being saved:"
+              %ul
+                - review.errors.full_messages.each do |msg|
+                  %li= msg
+          .form-group
+            = f.label :content
+            = f.text_area :content, class: 'form-control'
+          .form-group
+            = f.input :rating, input_html: { type: 'number', id: 'rating_id', class: 'rating' }, class: 'form-control'
+        .modal-footer
+          %button{ type: 'button', class: 'btn btn-default', 'data-dismiss' => 'modal' }
+            Close
+          = f.submit 'Save', class: 'btn btn-default'

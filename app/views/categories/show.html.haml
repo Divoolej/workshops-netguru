@@ -4,49 +4,51 @@
     - if user_signed_in?
       = link_to 'New Product', new_category_product_path(category), class: "btn btn-sm btn-block btn-default"
       %br
-    - products.each do |product|
-      .panel.panel-default
-        .panel-heading
-          %p.panel-title= product.title
-        %table.table
-          %thead
-            %tr
-              %th{ colspan: 2, class: "col-sm-6" }
-                Info
-              %th.col-xs-6
-                Latest Review
-          %tbody
-            %tr
-              %th{ scope: "row" }
-                Number of reviews:
-              %td= product.reviews.count
-              %td{ rowspan: 3, class: "centered-with-border" }
-                = product.latest_review
-            %tr
-              %th{ scope: "row" }
-                Price:
-              %td
-                = product.price_decorated
-            %tr
-              %th{ scope: "row" }
-                Rating:
-              %td
-                - product.average_rating.round.times do
-                  %span.glyphicon.glyphicon-star
-                - (5 - product.average_rating.round).times do
-                  %span.glyphicon.glyphicon-star-empty
-            %tr
-              %td{ colspan: 3 }
-                .row
-                  - if user_signed_in? and current_user == product.user
-                    .col-xs-4
-                      = link_to 'Edit', edit_category_product_path(category, product), class: "btn btn-xs btn-default btn-block"
-                    .col-xs-4
-                      = link_to 'Show', category_product_path(category, product), class: "btn btn-xs btn-default btn-block"
-                    .col-xs-4
-                      = link_to 'Delete', category_product_path(category, product), method: :delete, data: {confirm: "Are you sure? Reviews will be deleted too."}, class: "btn btn-xs btn-default btn-block"
-                  - else
-                    .col-xs-4.col-xs-offset-4
-                      = link_to 'Show', category_product_path(category, product), class: "btn btn-xs btn-default btn-block"
-              
-              
+    - if products.count == 0
+      .well.well-lg
+        There are currently no products in this category!
+    - else
+      - products.each do |product|
+        .panel.panel-default
+          .panel-heading
+            %p.panel-title= product.title
+          %table.table
+            %thead
+              %tr
+                %th{ colspan: 2, class: "col-sm-6" }
+                  Info
+                %th.col-xs-6
+                  Latest Review
+            %tbody
+              %tr
+                %th{ scope: "row" }
+                  Number of reviews:
+                %td= product.reviews.count
+                %td{ rowspan: 3, class: "centered-with-border" }
+                  = product.latest_review
+              %tr
+                %th{ scope: "row" }
+                  Price:
+                %td
+                  = product.price_decorated
+              %tr
+                %th{ scope: "row" }
+                  Rating:
+                %td
+                  - product.average_rating.round.times do
+                    %span.glyphicon.glyphicon-star
+                  - (5 - product.average_rating.round).times do
+                    %span.glyphicon.glyphicon-star-empty
+              %tr
+                %td{ colspan: 3 }
+                  .row
+                    - if user_signed_in? and current_user == product.user
+                      .col-xs-4
+                        = link_to 'Edit', edit_category_product_path(category, product), class: "btn btn-xs btn-default btn-block"
+                      .col-xs-4
+                        = link_to 'Show', category_product_path(category, product), class: "btn btn-xs btn-default btn-block"
+                      .col-xs-4
+                        = link_to 'Delete', category_product_path(category, product), method: :delete, data: {confirm: "Are you sure? Reviews will be deleted too."}, class: "btn btn-xs btn-default btn-block"
+                    - else
+                      .col-sm-4.col-sm-offset-4.col-xs-6.col-xs-offset-3
+                        = link_to 'Show', category_product_path(category, product), class: "btn btn-xs btn-default btn-block"

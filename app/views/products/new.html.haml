@@ -1,5 +1,7 @@
-%h1 New product
-
-= render 'form'
-
-= link_to 'Back', category_products_path
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    .jumbotron.hidden-xs
+      %h2.jumbo-header NEW PRODUCT
+    .jumbotron.visible-xs
+      %h2 NEW PRODUCT
+    = render 'form'

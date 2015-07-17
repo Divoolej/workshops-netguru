@@ -126,4 +126,12 @@ SimpleForm.setup do |config|
   # to learn about the different styles for forms and inputs,
   # buttons and other elements.
   config.default_wrapper = :vertical_form
+  
+  # config.boolean_style = :inline
+  
+  config.wrappers :inline_checkbox, :tag => 'div', :class => 'checkbox', :error_class => 'has-error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :label_input
+  end
 end

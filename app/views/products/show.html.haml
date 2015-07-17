@@ -1,26 +1,77 @@
-%p#notice= notice
-%p#error= flash[:error]
-
-%p
-  %b Title:
-  = product.title
-%p
-  %b Description:
-  = product.description
-%p
-  %b Price:
-  = product.price
-
-%p
-  %b Category
-  = product.category.name
-
-%h3 Reviews
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    .jumbotron.hidden-xs
+      %h2.jumbo-header= product.title
+    .jumbotron.visible-xs
+      %h2= product.title
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    .panel.panel-default
+      .panel-heading
+        %p.panel-title Product Info
+      %table.table
+        %tbody
+          %tr
+            %th{ scope: "row", class: "col-xs-3" }
+              Number of reviews:
+            %td{ class: "col-xs-3" }= product.reviews.count
+            %th{ class: "col-xs-6 centered" }
+              Description
+          %tr
+            %th{ scope: "row" }
+              Price:
+            %td
+              = product.price_decorated
+            %td{ rowspan: 3, class: "centered-with-border" }
+              = product.description
+          %tr
+            %th{ scope: "row" }
+              Average Rating:
+            %td
+              = product.average_rating.round(3)
+          %tr
+            %th{ scope: "row" }
+              Category:
+            %td
+              = product.category.name
+          %tr
+            %td{ colspan: 3 }
+              .row
+                - if current_user == product.user
+                  .col-xs-4
+                    = link_to 'Back', category_path(category), class: "btn btn-block btn-sm btn-default"
+                  .col-xs-4
+                    = link_to 'Add a review', '#reviewModal', data: {toggle: 'modal'}, class: "btn btn-block btn-sm btn-default"
+                  .col-xs-4
+                    = link_to 'Edit', edit_category_product_path(category, product), class: "btn btn-block btn-sm btn-default"
+                - elsif user_signed_in?
+                  .col-sm-4.col-xs-6.col-sm-offset-2
+                    = link_to 'Back', category_path(category), class: "btn btn-block btn-sm btn-default"
+                  .col-sm-4.col-xs-6
+                    = link_to 'Add a review', '#reviewModal', data: {toggle: 'modal'}, class: "btn btn-block btn-sm btn-default"
+                - else
+                  .col-sm-4.col-sm-offset-4.col-xs-6.col-xs-offset-3
+                    = link_to 'Back', category_path(category), class: "btn btn-block btn-sm btn-default"
+- unless reviews.empty?
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+      .panel.panel-default
+        .panel-heading
+          %p.panel-title Reviews
+        .panel-body
+          %br
+          .row
+            .col-sm-10.col-sm-offset-1
+              .container-fluid
+                = render reviews
+- else
+  .row
+    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+      .well.well-lg
+        There are no reviews for this product!
+        
 = render 'reviews/form'
 
-= render reviews
-
-- if current_user == product.user
-  = link_to 'Edit', edit_category_product_path(category.id, product.id)
-\|
-= link_to 'Back', category_products_path, class: 'btn btn-primary'
+- if flash[:modal]
+  %script
+    $(document).ready(function(){$("#reviewModal").modal('show');});

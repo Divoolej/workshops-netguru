@@ -1,24 +1,31 @@
 .row
-  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1.hidden-xs
-    #outerCarousel.carousel.slide
-      .carousel-inner
-        .item.active
-          %h1= carousel_header
-          #innerCarousel.carousel.slide{data: { ride: 'carousel', interval: 3000 } }
-            .carousel-inner
-              .item.active
-                %a{ href: carousel_for.first.url_to }
-                  %h4.active= carousel_for.first.carousel_string
-              - carousel_for[1..-1].each do |element|
-                .item
-                  %a{ href: element.url_to }
-                    %h4= element.carousel_string
-          %br
-      %a{href: '#innerCarousel', class: 'carousel-control left', 'data-slide' => 'prev'}
-        %span.glyphicon.glyphicon-chevron-left
-      %a{href: '#innerCarousel', class: 'carousel-control right', 'data-slide' => 'next'}
-        %span.glyphicon.glyphicon-chevron-right
-    %br
-  .col-xs-12.visible-xs
-    .jumbotron
-      %h2= carousel_header
+  - if carousel_for.count != 0
+    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1.hidden-xs
+      #outerCarousel.carousel.slide
+        .carousel-inner
+          .item.active
+            %h1= carousel_header
+            #innerCarousel.carousel.slide{data: { ride: 'carousel', interval: 3000 } }
+              .carousel-inner
+                .item.active
+                  %a{ href: carousel_for.first.url_to }
+                    %h4.active= carousel_for.first.carousel_string
+                - carousel_for[1..-1].each do |element|
+                  .item
+                    %a{ href: element.url_to }
+                      %h4= element.carousel_string
+            %br
+        %a{href: '#innerCarousel', class: 'carousel-control left', 'data-slide' => 'prev'}
+          %span.glyphicon.glyphicon-chevron-left
+        %a{href: '#innerCarousel', class: 'carousel-control right', 'data-slide' => 'next'}
+          %span.glyphicon.glyphicon-chevron-right
+      %br
+    .col-xs-12.visible-xs
+      .jumbotron
+        %h2= carousel_header
+  - else
+    .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+      .jumbotron.hidden-xs
+        %h2.jumbo-header= carousel_header
+      .jumbotron.visible-xs
+        %h2= carousel_header

@@ -1,9 +1,16 @@
-%h2 Resend unlock instructions
-= simple_form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f|
-  = f.error_notification
-  = f.full_error :unlock_token
-  .form-inputs
-    = f.input :email, required: true, autofocus: true
-  .form-actions
-    = f.button :submit, "Resend unlock instructions"
-= render "devise/shared/links"
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    .jumbotron.hidden-xs
+      %h2.jumbo-header UNLOCK ACCOUNT
+    .jumbotron.visible-xs
+      %h2 UNLOCK ACCOUNT
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    = simple_form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f|
+      = f.error_notification
+      = f.full_error :unlock_token
+      .form-inputs
+        = f.input :email, required: true, autofocus: true
+      .form-actions
+        = f.button :submit, "Resend unlock instructions"
+    = render "devise/shared/links"

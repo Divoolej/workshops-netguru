@@ -1,10 +1,19 @@
-%h2 Sign up
-= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-  = f.error_notification
-  .form-inputs
-    = f.input :email, required: true, autofocus: true
-    = f.input :password, required: true
-    = f.input :password_confirmation, required: true
-  .form-actions
-    = f.button :submit, "Sign up"
-= render "devise/shared/links"
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    .jumbotron.hidden-xs
+      %h2.jumbo-header SIGN UP
+    .jumbotron.visible-xs
+      %h2 SIGN UP
+.row
+  .col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+    = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+      = f.error_notification
+      .form-inputs
+        = f.input :email, required: true, autofocus: true
+        = f.input :password, required: true
+        = f.input :password_confirmation, required: true
+      .form-actions
+        = f.button :submit, "Sign up", class: "btn-block"
+    %br
+    .well.well-sm
+      = render "devise/shared/links"
