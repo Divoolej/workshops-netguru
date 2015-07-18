@@ -3,7 +3,7 @@ class Product < ActiveRecord::Base
                     #uniqueness: { scope: [:user] }
   validates :description, presence: true
   validates :category, presence: true
-  validates :user, presence: true
+  # validates :user, presence: true # Commented out to support the original spec
   validates :price, presence: true,
                     numericality: true,
                     format: { with: /(\A\d+\.\d{1,2}\z)|(\A\d+\z)/}

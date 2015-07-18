@@ -165,18 +165,18 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     ref (2.0.0)
-    request_store (1.1.0)
+    request_store (1.2.0)
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
-    rspec-core (3.3.1)
+    rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
-    rspec-expectations (3.3.0)
+    rspec-expectations (3.3.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
-    rspec-mocks (3.3.1)
+    rspec-mocks (3.3.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
-    rspec-rails (3.3.2)
+    rspec-rails (3.3.3)
       actionpack (>= 3.0, < 4.3)
       activesupport (>= 3.0, < 4.3)
       railties (>= 3.0, < 4.3)
@@ -208,7 +208,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
-    travis (1.7.7)
+    travis (1.8.0)
       addressable (~> 2.3)
       backports
       faraday (~> 0.9)
@@ -260,6 +260,3 @@ DEPENDENCIES
   therubyracer
   travis
   uglifier
-
-BUNDLED WITH
-   1.10.5
