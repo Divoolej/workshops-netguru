@@ -1,5 +1,46 @@
 # Workshops application [![Build Status](https://travis-ci.org/Divoolej/workshops-netguru.svg?branch=master)](https://travis-ci.org/Divoolej/workshops-netguru)
 
+Hello, this is my application for **Netguru's Ruby on Rails Workshops** in Warsaw.
+Here are some bullet points:
+
+### Preview
+You can see the app in action at https://divoolej-netguru-workshops.herokuapp.com
+
+### Setup
+To run the application on your computer:
+1. Get the source code: `git clone git@github.com:Divoolej/workshops-netguru`, and `bundle` it.
+2. Copy the database config file (`cp config/database.yml.sample config/database.yml`), and customize it to work with your own database server.
+3. Prepare the database for the application:
+  - `rake db:setup`
+  - `rake db:test:prepare` (if you want to run the tests)
+4. Create a Procfile file (in app's root directory) for the ['foreman'](https://github.com/ddollar/foreman) gem:
+  - `echo web: bundle exec rails server > Procfile`
+5. If you want to register new users locally, you need to add a gmail account to .env file (for sending account confirmation emails).
+  - example .env file:
+  ```
+  GMAIL_DOMAIN=gmail.com
+  GMAIL_USERNAME=your_email_address@gmail.com
+  GMAIL_PASSWORD=your_password
+  ```
+6. run `foreman start` to start the server.
+7. http://localhost:3000, and you're good to go!
+
+### Seeds data
+Here are some user's accounts to play around:
+  - (admin) email: 'admin@app.com', password: 'rootpassword'
+  - (regular user) email: email: 'jean.renault@tp.com', password: 'password1'
+
+### RSpec
+I modified most of the spec files (mostly because of the deprecated syntax), but their original functionality is preserved. In the end I didn't know if I am permitted to edit those files, so I made the app support the original specs too. They are located under 'spec-original' directory and need to be swapped with the current spec files in order to work. Run `rspec` to test the application.
+
+### That's it!
+I'm just starting my adventure with Rails and although I wanted to make this application as perfect as possible - I know it's not. That's why **any** feedback is invaluable and would be greatly appreciated. Please, feel free to contact me!
+
+**Thank You!**
+
+
+# Original README by Netguru
+
 Hi! We think it’s great that you want to **join along with Netguru** to start learning **Ruby on Rails**. Taking part in workshops is also a **great opportunity to start an internship** with us and become one of the Netguru folks. Since you have just taken your first step on your adventure with programming in RoR, we challenge you to complete the following task. **Ready, steady…Go!**
 
 ### Let’s start with a setup:

@@ -15,6 +15,10 @@ class UserDecorator < Draper::Decorator
   end
   
   def top_product
-    products.sort_by(&:average_rating).reverse.first.title
+    unless products.empty?
+      products.sort_by(&:average_rating).reverse.first.title
+    else
+      '-'
+    end
   end
 end
