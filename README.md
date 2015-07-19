@@ -8,13 +8,18 @@ You can see the app in action at https://divoolej-netguru-workshops.herokuapp.co
 
 ### Setup
 To run the application on your computer:
+
 1. Get the source code: `git clone git@github.com:Divoolej/workshops-netguru`, and `bundle` it.
+
 2. Copy the database config file (`cp config/database.yml.sample config/database.yml`), and customize it to work with your own database server.
+
 3. Prepare the database for the application:
   - `rake db:setup`
   - `rake db:test:prepare` (if you want to run the tests)
+
 4. Create a Procfile file (in app's root directory) for the ['foreman'](https://github.com/ddollar/foreman) gem:
   - `echo web: bundle exec rails server > Procfile`
+
 5. If you want to register new users locally, you need to add a gmail account to .env file (for sending account confirmation emails).
   - example .env file:
   ```
@@ -22,7 +27,9 @@ To run the application on your computer:
   GMAIL_USERNAME=your_email_address@gmail.com
   GMAIL_PASSWORD=your_password
   ```
+
 6. run `foreman start` to start the server.
+
 7. http://localhost:3000, and you're good to go!
 
 ### Seeds data
